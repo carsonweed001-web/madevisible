@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Clara Benton Coaching — life and business coaching for people ready to stop waiting for the right time.">
+  <title>Clara Benton Coaching — Made Visible Example</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #F7F3EE;
+      --bg-dark: #1C2B2A;
+      --bg-rust: #C4530A;
+      --bg-blush: #F0DDD5;
+      --bg-sage: #E8EDE6;
+      --ink: #1C2B2A;
+      --ink-soft: #4A5C5A;
+      --ink-muted: #8A9E9C;
+      --accent: #C4530A;
+      --accent-gold: #D4A853;
+      --accent-blush: #E8A090;
+      --white: #FDFAF7;
+      --border: #D4C8BE;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --radius-pill: 100px;
+      --radius-card: 16px;
+      --radius-sm: 12px;
+      --transition: 0.3s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--ink-soft); line-height: 1.6; -webkit-font-smoothing: antialiased; padding-top: 64px; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-animate {
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .hero-animate:nth-child(1) { animation-delay: 0s; }
+    .hero-animate:nth-child(2) { animation-delay: 0.15s; }
+    .hero-animate:nth-child(3) { animation-delay: 0.3s; }
+    .hero-animate:nth-child(4) { animation-delay: 0.45s; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Section label */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .section-label::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── Navigation ─── */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--bg-dark);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .site-nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .site-logo em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent-gold);
+    }
+    .back-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent-gold);
+      transition: color var(--transition);
+    }
+    .back-link:hover { color: #fff; }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100svh;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 88px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Large decorative circle — top-right, partially cropped */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(196, 83, 10, 0.3);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Small filled circle — bottom-left */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 60px;
+      left: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(212, 168, 83, 0.15);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 24px;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent-gold);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      letter-spacing: -0.03em;
+      line-height: 0.96;
+      color: #fff;
+      max-width: 820px;
+      margin-bottom: 28px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.125rem;
+      color: rgba(253, 250, 247, 0.7);
+      max-width: 500px;
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(196, 83, 10, 0.32);
+    }
+    .btn-primary:hover {
+      background: #A34208;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(196, 83, 10, 0.42);
+    }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+    }
+    .btn-outline:hover {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ─── About ─── */
+    .about {
+      padding: 112px 0;
+      background: var(--bg-primary);
+      border-top: 1px solid rgba(26, 43, 42, 0.08);
+      position: relative;
+    }
+
+    /* Decorative vertical gold line — left margin */
+    .about::before {
+      content: '';
+      position: absolute;
+      left: 40px;
+      top: 112px;
+      width: 2px;
+      height: 80px;
+      background: var(--accent-gold);
+      pointer-events: none;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .about h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .about h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
+    .about p { margin-bottom: 18px; line-height: 1.7; color: var(--ink-soft); font-size: 1rem; }
+
+    .credentials {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .credential-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+    }
+    .credential-item::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .portrait-placeholder {
+      aspect-ratio: 3 / 4;
+      background: var(--bg-blush);
+      border-radius: var(--radius-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px dashed var(--accent-blush);
+    }
+    .portrait-placeholder .placeholder-label {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      text-align: center;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    /* ─── Services ─── */
+    .services {
+      padding: 112px 0;
+      background: var(--bg-blush);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Large decorative ring — right side */
+    .services::after {
+      content: '';
+      position: absolute;
+      right: -140px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      border: 48px solid rgba(28, 43, 42, 0.04);
+      pointer-events: none;
+    }
+
+    .services-header {
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .services-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .service-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: var(--radius-card);
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+    }
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .service-price {
+      font-family: var(--font-display);
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .service-price-sub {
+      font-size: 0.8125rem;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+    .service-divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+    .service-features { flex: 1; }
+    .service-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .service-features li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .service-cta {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .service-cta:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ─── Gallery ─── */
+    .gallery {
+      padding: 112px 0;
+      background: var(--bg-dark);
+    }
+    .gallery .section-label {
+      color: var(--accent-gold);
+    }
+    .gallery .section-label::before {
+      background: var(--accent-gold);
+    }
+    .gallery h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 48px;
+    }
+    .gallery-sublabel {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(253, 250, 247, 0.4);
+      margin-bottom: 16px;
+    }
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .gallery-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ig-placeholder {
+      aspect-ratio: 1 / 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px dashed rgba(212, 168, 83, 0.4);
+      border-radius: 12px;
+    }
+    .photo-placeholder {
+      aspect-ratio: 3 / 2;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px dashed rgba(232, 160, 144, 0.4);
+      border-radius: 12px;
+    }
+    .placeholder-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      text-align: center;
+      padding: 16px;
+      line-height: 1.5;
+    }
+    /* Placeholder labels inside the dark gallery section */
+    .gallery .placeholder-label {
+      color: rgba(253, 250, 247, 0.35);
+    }
+
+    /* ─── Testimonials ─── */
+    .testimonials {
+      padding: 112px 0;
+      background: var(--bg-sage);
+    }
+    .testimonials h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 48px;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 72px;
+    }
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 36px;
+    }
+    /* Decorative opening quotation mark */
+    .testimonial-card::before {
+      content: '\201C';
+      font-family: var(--font-display);
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--accent-gold);
+      opacity: 0.45;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .testimonial-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    .testimonial-attribution {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .testimonial-role {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: var(--bg-rust);
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Large circle — top-right, partially cropped */
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+    }
+    /* Small filled circle — bottom-left */
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      bottom: 32px;
+      left: 40px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 1; }
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .cta-section h2 em { font-style: italic; font-weight: 300; color: #fff; }
+    .cta-sub {
+      font-size: 1rem;
+      color: rgba(253, 250, 247, 0.75);
+      line-height: 1.65;
+      max-width: 460px;
+      margin: 0 auto 36px;
+    }
+    /* White button with rust text; hover goes dark */
+    .btn-gold {
+      background: var(--white);
+      color: var(--accent);
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .btn-gold:hover {
+      background: var(--bg-dark);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* ─── Footer ─── */
+    .site-footer {
+      background: var(--bg-dark);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 48px 0 32px;
+      color: rgba(253, 250, 247, 0.4);
+    }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .footer-logo em { font-style: italic; font-weight: 300; color: var(--accent-gold); }
+    .footer-copy { font-size: 0.8125rem; }
+    .footer-credit {
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      width: 100%;
+      text-align: right;
+      transition: color var(--transition);
+    }
+    .footer-credit a {
+      color: inherit;
+      transition: color var(--transition);
+    }
+    .footer-credit a:hover { color: rgba(253, 250, 247, 0.7); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .container, .site-nav-inner, .hero-content { padding-left: 24px; padding-right: 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .ig-grid { grid-template-columns: repeat(2, 1fr); }
+      .about, .services, .gallery, .testimonials { padding: 80px 0; }
+      .cta-section { padding: 80px 0; }
+      .about::before { left: 24px; top: 80px; }
+    }
+    @media (max-width: 600px) {
+      .photo-grid { grid-template-columns: 1fr; }
+      .hero { padding-bottom: 64px; }
+      .hero-buttons { flex-direction: column; }
+      .hero-buttons .btn { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-credit { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="#" class="site-logo">Clara Benton <em>Coaching</em></a>
+      <a href="examples.html" class="back-link">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tag hero-animate">Life & Business Coaching</p>
+      <h1 class="hero-animate">Clarity for the life you've been <em>putting off.</em></h1>
+      <p class="hero-sub hero-animate">Whether you're changing careers, navigating a major transition, or simply feeling stuck — I help you get clear on what you actually want and build a concrete path toward it.</p>
+      <div class="hero-buttons hero-animate">
+        <a href="https://calendly.com/carsonweed001/made-visible-discovery-call" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Book a Discovery Call</a>
+        <a href="#services" class="btn btn-outline">How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid reveal">
+        <img src="images/clarahs.jpeg" alt="Clara Benton, life and business coach" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;">
+        <div>
+          <p class="section-label">About Clara</p>
+          <h2>I know what it's like to build the <em>wrong</em> life.</h2>
+          <p>I spent twelve years in corporate finance before admitting I was miserable. In 2018 I left, got certified through the ICF, and started coaching people in exactly the position I'd been in — smart, capable, and completely disconnected from what they actually wanted.</p>
+          <p>Since then I've worked with over 200 clients across 14 countries. Executives, teachers, new parents, people leaving marriages, starting businesses, and everything in between.</p>
+          <p>The work is different for everyone. The goal is always the same: you walk away knowing exactly what you want and why — and with a real plan to get there.</p>
+          <div class="credentials">
+            <div class="credential-item">ICF Professional Certified Coach (PCC)</div>
+            <div class="credential-item">200+ clients coached across 14 countries</div>
+            <div class="credential-item">12-week Clarity Method signature program</div>
+            <div class="credential-item">Free 30-minute discovery call — no commitment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header reveal">
+        <p class="section-label">Work With Me</p>
+        <h2>Three ways to get started.</h2>
+      </div>
+      <div class="services-grid reveal">
+        <article class="service-card">
+          <p class="service-card-label">Most Intensive</p>
+          <h3>1:1 Coaching</h3>
+          <div class="service-price">$650</div>
+          <p class="service-price-sub">per month · 3-month minimum</p>
+          <div class="service-divider"></div>
+          <ul class="service-features">
+            <li>Two 60-minute sessions per month</li>
+            <li>Unlimited messaging between sessions</li>
+            <li>Personalized growth roadmap and check-ins</li>
+            <li>Access to full library of exercises and tools</li>
+          </ul>
+          <a href="#" class="service-cta">Apply Now →</a>
+        </article>
+        <article class="service-card">
+          <p class="service-card-label">Community</p>
+          <h3>Group Program</h3>
+          <div class="service-price">$299</div>
+          <p class="service-price-sub">per month · cohorts of 6–8</p>
+          <div class="service-divider"></div>
+          <ul class="service-features">
+            <li>Weekly 90-minute group sessions</li>
+            <li>Shared accountability and peer feedback</li>
+            <li>Monthly 1:1 check-in with Clara</li>
+            <li>Workbooks, exercises, and recordings</li>
+          </ul>
+          <a href="#" class="service-cta">See Open Cohorts →</a>
+        </article>
+        <article class="service-card">
+          <p class="service-card-label">Self-Paced</p>
+          <h3>The Clarity Method</h3>
+          <div class="service-price">$197</div>
+          <p class="service-price-sub">one-time · lifetime access</p>
+          <div class="service-divider"></div>
+          <ul class="service-features">
+            <li>6 self-paced video modules</li>
+            <li>Downloadable workbooks and exercises</li>
+            <li>Private community access</li>
+            <li>Bonus: Values Mapping deep-dive session</li>
+          </ul>
+          <a href="#" class="service-cta">Enroll Today →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Content & Photography</p>
+        <h2>A presence that builds trust.</h2>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel">Instagram Content</p>
+        <div class="ig-grid">
+          <img src="images/carousel-lifecoach-1.jpeg" alt="Clara Benton Coaching Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/carousel-lifecoach-2.jpeg" alt="Clara Benton Coaching Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/carousel-lifecoach-3.jpeg" alt="Clara Benton Coaching Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel" style="margin-top: 36px;">Brand Photography</p>
+        <div class="photo-grid">
+          <img src="images/photo-lifecoach-1.jpeg" alt="Clara Benton Coaching brand photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/photo-lifecoach-2.jpeg" alt="Clara Benton Coaching brand photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials + CTA -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Client Stories</p>
+        <h2>What people say.</h2>
+      </div>
+      <div class="testimonials-grid reveal">
+        <article class="testimonial-card">
+          <p class="testimonial-quote">"Working with Clara was the first time I felt genuinely heard in years. By month two I'd turned in my notice. By month three I had my first client."</p>
+          <p class="testimonial-attribution">Marcus T.</p>
+          <p class="testimonial-role">Career Changer · Former Marketing Director</p>
+        </article>
+        <article class="testimonial-card">
+          <p class="testimonial-quote">"I came in thinking I had a time management problem. Clara helped me realize I had a values problem. It completely changed how I approach every decision I make."</p>
+          <p class="testimonial-attribution">Priya S.</p>
+          <p class="testimonial-role">Founder · Product Studio</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container cta-inner reveal">
+      <h2>Ready to get <em>clear?</em></h2>
+      <p class="cta-sub">Start with a free 30-minute discovery call. No pitch, no pressure — just an honest conversation about where you are and where you want to go.</p>
+      <a href="https://calendly.com/carsonweed001/made-visible-discovery-call" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Book My Free Call →</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">Clara Benton <em>Coaching</em></span>
+      <span class="footer-copy">© 2026 Clara Benton Coaching · hello@clarabenton.com</span>
+      <span class="footer-credit"><a href="index.html">Built by Made Visible</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      revealEls.forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>

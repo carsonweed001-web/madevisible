@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ridge & Sons Construction — family-owned residential contractor serving Detroit since 1996. Licensed, insured, and built on a handshake policy.">
+  <title>Ridge & Sons Construction — Made Visible Example</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F4F2;
+      --surface: #FAFAF8;
+      --dark: #1C3A5C;
+      --navy: #1C3A5C;
+      --steel: #4A5568;
+      --orange: #D97C3A;
+      --orange-dark: #B8622A;
+      --text: #1E2A38;
+      --text-muted: #6B7A8E;
+      --border: #D0D5DC;
+      --font-display: 'Inter', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --radius-pill: 100px;
+      --radius-card: 12px;
+      --radius-sm: 8px;
+      --transition: 0.25s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; padding-top: 64px; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    .container { max-width: 1120px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-animate { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .hero-animate:nth-child(1) { animation-delay: 0s; }
+    .hero-animate:nth-child(2) { animation-delay: 0.1s; }
+    .hero-animate:nth-child(3) { animation-delay: 0.2s; }
+    .hero-animate:nth-child(4) { animation-delay: 0.3s; }
+    .hero-animate:nth-child(5) { animation-delay: 0.4s; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    .section-label::before { content: ''; width: 16px; height: 2px; background: var(--orange); flex-shrink: 0; }
+
+    /* Nav */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--navy);
+    }
+    .site-nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 1.0625rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .site-logo span { color: var(--orange); }
+    .back-link { font-size: 0.8125rem; font-weight: 500; color: rgba(255,255,255,0.45); transition: color var(--transition); }
+    .back-link:hover { color: rgba(255,255,255,0.8); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--orange); color: #fff; box-shadow: 0 4px 18px rgba(217, 124, 58, 0.3); }
+    .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(217, 124, 58, 0.4); }
+    .btn-outline-light { background: transparent; color: rgba(255,255,255,0.75); border: 2px solid rgba(255,255,255,0.3); }
+    .btn-outline-light:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+    .btn-navy { background: var(--navy); color: #fff; }
+    .btn-navy:hover { background: #142d48; transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { background: var(--text); color: #fff; }
+
+    /* Hero */
+    .hero {
+      min-height: 100svh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 100% 0%, rgba(217, 124, 58, 0.07) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.12) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+    .hero-tag::before { content: ''; width: 16px; height: 2px; background: var(--orange); }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.75rem, 7vw, 6.5rem);
+      letter-spacing: -0.03em;
+      line-height: 0.97;
+      color: #fff;
+      max-width: 820px;
+      margin-bottom: 28px;
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero-sub { font-size: 1.0625rem; color: rgba(255,255,255,0.6); max-width: 520px; margin-bottom: 32px; line-height: 1.65; }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 36px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .trust-badge {
+      flex: 1;
+      min-width: 160px;
+      padding: 16px 20px;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    .trust-badge:last-child { border-right: none; }
+    .trust-badge-num {
+      font-size: 1.375rem;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+      margin-bottom: 2px;
+    }
+    .trust-badge-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    /* Services */
+    .services { padding: 88px 0; background: var(--surface); }
+    .services-header { margin-bottom: 44px; }
+    .services-header h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: var(--dark);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .service-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 32px 28px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .service-card:hover { border-color: var(--navy); background: var(--surface); }
+    .service-icon {
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+    }
+    .service-card h3 {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .service-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* About */
+    .about { padding: 88px 0; background: var(--bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .about h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+    .about p { font-size: 0.9375rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+    .about p:last-of-type { margin-bottom: 32px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .stat-item { background: var(--surface); padding: 20px 16px; text-align: center; }
+    .stat-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 0.75rem; font-weight: 500; color: var(--text-muted); }
+
+    .team-photo-placeholder {
+      aspect-ratio: 4 / 3;
+      background: #D8E4EE;
+      border-radius: var(--radius-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border);
+    }
+    .team-photo-placeholder .placeholder-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    /* Gallery */
+    .gallery { padding: 88px 0; background: var(--surface); }
+    .gallery h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      margin-bottom: 44px;
+    }
+    .gallery-sublabel { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .gallery-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: #D8E4EE;
+    }
+    .ig-placeholder { aspect-ratio: 1 / 1; }
+    .photo-placeholder { aspect-ratio: 3 / 2; }
+    .placeholder-label { font-family: var(--font-body); font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 12px; line-height: 1.5; }
+
+    /* Quote CTA */
+    .quote-section { padding: 88px 0; background: var(--navy); }
+    .quote-inner { position: relative; }
+    .quote-section h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .quote-section h2 span { color: var(--orange); }
+    .quote-sub { font-size: 1rem; color: rgba(255,255,255,0.55); max-width: 500px; line-height: 1.65; margin-bottom: 40px; }
+
+    .form-stub {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-card);
+      padding: 36px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .form-field {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.35);
+    }
+    .form-note { font-size: 0.8125rem; color: rgba(255,255,255,0.35); margin-top: 16px; line-height: 1.5; }
+    .service-area { margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+    /* Footer */
+    .site-footer { background: #111E2E; padding: 40px 0 28px; color: rgba(255,255,255,0.4); }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.01em; color: #fff; }
+    .footer-logo span { color: var(--orange); }
+    .footer-copy { font-size: 0.8125rem; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container, .site-nav-inner, .hero-content { padding-left: 24px; padding-right: 24px; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 44px; }
+      .ig-grid, .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+      .trust-row { flex-wrap: wrap; }
+      .trust-badge { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .trust-badge:last-child { border-bottom: none; }
+      .services, .about, .gallery, .quote-section { padding: 64px 0; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .ig-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-grid { grid-template-columns: 1fr; }
+      .hero { padding-bottom: 56px; }
+      .hero-buttons { flex-direction: column; }
+      .hero-buttons .btn { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="#" class="site-logo">Ridge <span>&</span> Sons Construction</a>
+      <a href="examples.html" class="back-link">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tag hero-animate">Licensed General Contractor · Detroit</p>
+      <h1 class="hero-animate">Built right.<br>Done on time.<br><span>Guaranteed.</span></h1>
+      <div class="trust-row hero-animate">
+        <div class="trust-badge">
+          <div class="trust-badge-num">28</div>
+          <div class="trust-badge-label">Years in Business</div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge-num">500+</div>
+          <div class="trust-badge-label">Projects Completed</div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge-num">4.9★</div>
+          <div class="trust-badge-label">Average Rating</div>
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge-num">✓</div>
+          <div class="trust-badge-label">Licensed & Insured</div>
+        </div>
+      </div>
+      <p class="hero-sub hero-animate">Family-owned residential construction and remodeling. Serving Detroit and surrounding areas since 1996.</p>
+      <div class="hero-buttons hero-animate">
+        <a href="#quote" class="btn btn-primary">Get a Free Quote</a>
+        <a href="#services" class="btn btn-outline-light">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header reveal">
+        <p class="section-label">What We Build</p>
+        <h2>Residential construction, start to finish.</h2>
+      </div>
+      <div class="services-grid reveal">
+        <article class="service-card">
+          <div class="service-icon">🍳</div>
+          <h3>Kitchen Remodeling</h3>
+          <p>Full gut renovations, custom cabinet installation, countertops, plumbing, and fixtures. Our most-requested project type — and the one we're most proud of.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🚿</div>
+          <h3>Bathroom Renovation</h3>
+          <p>Tile work, plumbing updates, walk-in shower conversions, vanity installation, and full gut renovations from a single-day refresh to a complete overhaul.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🏠</div>
+          <h3>Room Additions</h3>
+          <p>Expand your footprint with permitted, engineer-approved room additions. We handle the drawings, the permits, and every phase of construction.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🏗️</div>
+          <h3>Roofing</h3>
+          <p>Full roof replacements, targeted repairs, and storm damage assessments. We work with all materials and every major insurance provider.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🌿</div>
+          <h3>Deck & Outdoor Living</h3>
+          <p>Custom decks, pergolas, covered patios, and outdoor kitchens. We build outdoor spaces that actually get used.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🔧</div>
+          <h3>General Contracting</h3>
+          <p>Major renovations, whole-home remodels, and project management for complex builds. One point of contact, start to finish.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid reveal">
+        <div>
+          <p class="section-label">About Us</p>
+          <h2>Family-owned since 1996.</h2>
+          <p>My father started Ridge & Sons with a pickup truck and a handshake policy. Twenty-eight years later we've completed over 500 residential projects across [County]. The truck is newer. The handshake policy isn't.</p>
+          <p>We run a tight crew. Every project is overseen by a principal — not handed off to a subcontractor you've never met. We show up when we say we will, we communicate throughout, and we don't consider a job done until you're satisfied.</p>
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-num">28yr</div>
+              <div class="stat-label">In Business</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">4.9★</div>
+              <div class="stat-label">Rated</div>
+            </div>
+          </div>
+        </div>
+        <img src="images/ridgeteamhs.jpeg" alt="The Ridge and Sons Construction team" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Our Work</p>
+        <h2>Projects speak louder than promises.</h2>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel">Instagram Content</p>
+        <div class="ig-grid">
+          <img src="images/carousel-contractor-1.jpeg" alt="Ridge and Sons Construction Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;" loading="lazy">
+          <img src="images/carousel-contractor-2.jpeg" alt="Ridge and Sons Construction Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;" loading="lazy">
+          <img src="images/carousel-contractor-3.jpeg" alt="Ridge and Sons Construction Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;" loading="lazy">
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel" style="margin-top: 28px;">Brand Photography</p>
+        <div class="photo-grid">
+          <img src="images/photo-contractor-1.jpeg" alt="Ridge and Sons Construction project photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;" loading="lazy">
+          <img src="images/photo-contractor-2.jpeg" alt="Ridge and Sons Construction project photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote CTA -->
+  <section class="quote-section" id="quote">
+    <div class="container">
+      <div class="quote-inner reveal">
+        <p class="section-label" style="color: rgba(255,255,255,0.35);">Free Estimate</p>
+        <h2>Let's talk about<br>your <span>project.</span></h2>
+        <p class="quote-sub">Tell us what you're working on and we'll get back to you within 24 hours with a free, no-obligation estimate.</p>
+
+        <div class="form-stub">
+          <div class="form-row">
+            <div class="form-field">Your Name</div>
+            <div class="form-field">Phone Number</div>
+            <div class="form-field">Project Type</div>
+          </div>
+          <a href="https://calendly.com/carsonweed001/made-visible-discovery-call" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Send My Request →</a>
+          <p class="form-note">Or call us directly: <strong style="color: rgba(255,255,255,0.6);">[Phone Number]</strong> · Mon–Fri 7am–5pm · Sat 8am–12pm</p>
+        </div>
+
+        <p class="service-area">Proudly serving Detroit, Dearborn, Royal Oak, and all communities within 40 miles. Licensed in [State] · Fully Insured · No subcontractors without your knowledge.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">Ridge <span>&</span> Sons Construction</span>
+      <span class="footer-copy">© 2026 Ridge & Sons Construction · Detroit, MI · hello@ridgeandsons.com</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      revealEls.forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>

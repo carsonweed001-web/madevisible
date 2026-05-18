@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Hearth Table — slow food, good people, a neighborhood restaurant worth returning to. Reservations open now.">
+  <title>The Hearth Table — Made Visible Example</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F9F4E7;
+      --surface: #FDFAF2;
+      --dark: #1A1008;
+      --burgundy: #6B2535;
+      --forest: #2D4A3E;
+      --gold: #C4A050;
+      --gold-light: #E8D5A0;
+      --text: #3A2A1A;
+      --text-muted: #9A8870;
+      --border: #DDD0B4;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --radius-pill: 100px;
+      --radius-card: 16px;
+      --radius-sm: 10px;
+      --transition: 0.3s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; padding-top: 68px; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    .container { max-width: 1120px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-animate { opacity: 0; animation: fadeUp 1s ease forwards; }
+    .hero-animate:nth-child(1) { animation-delay: 0s; }
+    .hero-animate:nth-child(2) { animation-delay: 0.2s; }
+    .hero-animate:nth-child(3) { animation-delay: 0.4s; }
+    .hero-animate:nth-child(4) { animation-delay: 0.6s; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    .section-label::before { content: ''; width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; }
+
+    /* Nav */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--dark);
+      border-bottom: 1px solid rgba(196, 160, 80, 0.25);
+    }
+    .site-nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #fff;
+    }
+    .site-logo em { font-style: italic; font-weight: 400; color: var(--gold); }
+    .back-link { font-size: 0.8125rem; font-weight: 500; color: rgba(255,255,255,0.45); transition: color var(--transition); }
+    .back-link:hover { color: rgba(255,255,255,0.8); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-gold { background: var(--gold); color: var(--dark); font-weight: 600; }
+    .btn-gold:hover { background: #a8882e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196, 160, 80, 0.3); }
+    .btn-outline-light { background: transparent; color: rgba(255,255,255,0.7); border: 1.5px solid rgba(255,255,255,0.3); }
+    .btn-outline-light:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+    .btn-burgundy { background: var(--burgundy); color: #fff; }
+    .btn-burgundy:hover { background: #4f1a28; transform: translateY(-2px); }
+    .btn-outline-dark { background: transparent; color: var(--dark); border: 1.5px solid var(--border); }
+    .btn-outline-dark:hover { background: var(--dark); color: #fff; }
+
+    /* Hero */
+    .hero {
+      min-height: 100svh;
+      background: var(--dark);
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 88px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 10% 90%, rgba(107, 37, 53, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 90% 10%, rgba(45, 74, 62, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(196, 160, 80, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-bg-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(255,255,255,0.06);
+      margin: 24px;
+      border-radius: 12px;
+    }
+    .hero-bg-placeholder span {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.15);
+      text-align: center;
+      padding: 16px;
+      line-height: 1.5;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .hero-tag::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(3rem, 7vw, 7rem);
+      letter-spacing: -0.01em;
+      line-height: 0.96;
+      color: #fff;
+      max-width: 800px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+    .hero-sub { font-size: 1.0625rem; color: rgba(255,255,255,0.55); max-width: 400px; margin-bottom: 36px; line-height: 1.65; }
+    .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* Story */
+    .story {
+      padding: 96px 0;
+      background: var(--surface);
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .story h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .story h2 em { font-style: italic; font-weight: 400; color: var(--burgundy); }
+    .story p { font-size: 1rem; line-height: 1.75; color: var(--text); margin-bottom: 18px; }
+    .story-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      color: var(--forest);
+      border-left: 3px solid var(--gold);
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .dish-placeholder {
+      aspect-ratio: 1 / 1;
+      background: var(--gold-light);
+      border-radius: var(--radius-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border);
+    }
+    .dish-placeholder .placeholder-label { font-family: var(--font-body); font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 20px; line-height: 1.5; }
+
+    /* Menu */
+    .menu {
+      padding: 96px 0;
+      background: var(--burgundy);
+    }
+    .menu-header { margin-bottom: 52px; }
+    .menu-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .menu-header h2 em { font-style: italic; font-weight: 400; color: var(--gold-light); }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.08);
+    }
+    .menu-item {
+      background: var(--burgundy);
+      padding: 40px 36px;
+      border-left: 3px solid var(--gold);
+      transition: background var(--transition);
+    }
+    .menu-item:hover { background: rgba(255,255,255,0.04); }
+    .menu-item-name {
+      font-family: var(--font-display);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .menu-item-desc { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.6; margin-bottom: 16px; }
+    .menu-item-price {
+      font-family: var(--font-display);
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .menu-note {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .menu-note a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; transition: opacity var(--transition); }
+    .menu-note a:hover { opacity: 0.8; }
+
+    /* Gallery */
+    .gallery { padding: 96px 0; background: var(--surface); }
+    .gallery h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.01em;
+      color: var(--dark);
+      margin-bottom: 48px;
+    }
+    .gallery-sublabel { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 36px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .gallery-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      background: var(--gold-light);
+      opacity: 0.55;
+    }
+    .ig-placeholder { aspect-ratio: 1 / 1; }
+    .photo-placeholder { aspect-ratio: 3 / 2; }
+    .placeholder-label { font-family: var(--font-body); font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 14px; line-height: 1.5; }
+
+    /* Hours + Reservation */
+    .hours {
+      padding: 96px 0;
+      background: var(--bg);
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .hours h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.01em;
+      color: var(--dark);
+      margin-bottom: 32px;
+    }
+    .hours-table { width: 100%; border-collapse: collapse; }
+    .hours-table tr { border-bottom: 1px solid var(--border); }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td { padding: 12px 0; font-size: 0.9375rem; }
+    .hours-table td:last-child { text-align: right; color: var(--text-muted); }
+    .hours-table .closed { color: var(--text-muted); opacity: 0.5; }
+    .address {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .address p { font-size: 0.9375rem; color: var(--text-muted); line-height: 1.7; }
+
+    .reservation-box {
+      background: var(--forest);
+      border-radius: 20px;
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .reservation-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(196, 160, 80, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .res-inner { position: relative; z-index: 1; }
+    .reservation-box h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .reservation-box h3 em { font-style: italic; font-weight: 400; color: var(--gold-light); }
+    .reservation-box p { font-size: 0.9375rem; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 28px; }
+    .res-note { font-size: 0.8125rem; color: rgba(255,255,255,0.35); margin-top: 16px; line-height: 1.5; }
+
+    /* Footer */
+    .site-footer { background: var(--dark); padding: 44px 0 28px; color: rgba(255,255,255,0.4); }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: #fff; }
+    .footer-logo em { font-style: italic; font-weight: 400; color: var(--gold); }
+    .footer-copy { font-size: 0.8125rem; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container, .site-nav-inner, .hero-content { padding-left: 24px; padding-right: 24px; }
+      .story-grid { grid-template-columns: 1fr; gap: 48px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .hours-grid { grid-template-columns: 1fr; gap: 48px; }
+      .ig-grid, .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .story, .menu, .gallery, .hours { padding: 72px 0; }
+    }
+    @media (max-width: 600px) {
+      .hero { padding-bottom: 60px; }
+      .hero h1 { font-size: clamp(2.5rem, 10vw, 4rem); }
+      .hero-buttons { flex-direction: column; }
+      .hero-buttons .btn { width: 100%; justify-content: center; }
+      .ig-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-grid { grid-template-columns: 1fr; }
+      .reservation-box { padding: 36px 28px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="#" class="site-logo">The Hearth <em>Table</em></a>
+      <a href="examples.html" class="back-link">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <!-- Replace this div with a full-bleed background image: style="background-image:url('hero.jpg');background-size:cover;background-position:center;" on the .hero element -->
+    <div class="hero-bg-placeholder">
+      <span>Hero Background — 1920×1080<br>(Restaurant interior or food photography)</span>
+    </div>
+    <div class="hero-content">
+      <p class="hero-tag hero-animate">Dinner · Detroit</p>
+      <h1 class="hero-animate">Slow food.<br>Good people.<br><em>Your table is waiting.</em></h1>
+      <p class="hero-sub hero-animate">Open Tuesday through Sunday. Reservations recommended.</p>
+      <div class="hero-buttons hero-animate">
+        <a href="#reservation" class="btn btn-gold">Reserve a Table</a>
+        <a href="#menu" class="btn btn-outline-light">View Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="story" id="story">
+    <div class="container">
+      <div class="story-grid reveal">
+        <div>
+          <p class="section-label">Our Story</p>
+          <h2>This started as <em>Sunday dinners.</em></h2>
+          <p>What started as Sunday dinners for family and neighbors became something we couldn't stop. The Hearth Table opened in 2019 with one rule: only serve food you'd actually want to eat yourself.</p>
+          <blockquote class="story-quote">"We work with local farms. We change the menu with the seasons. We don't rush tables. A great meal should take two hours."</blockquote>
+          <p>Every dish on our menu has a reason to be there. We're not trying to have the biggest menu in town — just the most thoughtful one.</p>
+        </div>
+        <img src="images/featureddish.jpeg" alt="Featured dish at The Hearth Table" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="menu-header reveal">
+        <p class="section-label" style="color: rgba(255,255,255,0.4);">
+          Menu
+        </p>
+        <h2>From the kitchen. <em>Seasonal.</em></h2>
+      </div>
+      <div class="menu-grid reveal">
+        <article class="menu-item">
+          <h3 class="menu-item-name">Braised Short Rib</h3>
+          <p class="menu-item-desc">Creekstone Farms beef, horseradish polenta, pickled shallot gremolata, natural jus</p>
+          <p class="menu-item-price">$36</p>
+        </article>
+        <article class="menu-item">
+          <h3 class="menu-item-name">Roasted Beet & Burrata</h3>
+          <p class="menu-item-desc">Local golden and candy-stripe beets, fresh burrata, toasted walnuts, aged sherry vinaigrette</p>
+          <p class="menu-item-price">$18</p>
+        </article>
+        <article class="menu-item">
+          <h3 class="menu-item-name">Pan-Seared Duck Breast</h3>
+          <p class="menu-item-desc">Duck confit leg, sour cherry gastrique, wilted bitter greens, duck fat potatoes</p>
+          <p class="menu-item-price">$42</p>
+        </article>
+        <article class="menu-item">
+          <h3 class="menu-item-name">Warm Chocolate Torte</h3>
+          <p class="menu-item-desc">Valrhona 70% chocolate, salted caramel center, vanilla bean crème fraîche</p>
+          <p class="menu-item-price">$14</p>
+        </article>
+      </div>
+      <p class="menu-note reveal">Menu changes seasonally. <a href="#">View current full menu →</a></p>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Photography</p>
+        <h2>The food. The room. The feeling.</h2>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel">Instagram Content</p>
+        <div class="ig-grid">
+          <img src="images/carousel-restaurant-1.jpeg" alt="The Hearth Table Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/carousel-restaurant-2.jpeg" alt="The Hearth Table Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/carousel-restaurant-3.jpeg" alt="The Hearth Table Instagram post" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;" loading="lazy">
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="gallery-sublabel" style="margin-top: 32px;">Brand Photography</p>
+        <div class="photo-grid">
+          <img src="images/photo-restaurant-1.jpeg" alt="The Hearth Table brand photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;" loading="lazy">
+          <img src="images/photo-restaurant-2.jpeg" alt="The Hearth Table brand photography" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hours + Reservation -->
+  <section class="hours" id="reservation">
+    <div class="container">
+      <div class="hours-grid reveal">
+        <div>
+          <p class="section-label">Visit Us</p>
+          <h2>Hours & location.</h2>
+          <table class="hours-table">
+            <tbody>
+              <tr><td>Tuesday – Thursday</td><td>5pm – 9pm</td></tr>
+              <tr><td>Friday – Saturday</td><td>5pm – 10pm</td></tr>
+              <tr><td>Sunday</td><td>4pm – 8pm</td></tr>
+              <tr class="closed"><td>Monday</td><td>Closed</td></tr>
+            </tbody>
+          </table>
+          <div class="address">
+            <p>[Street Address]<br>Detroit, MI 48201<br><br>[Phone Number]<br>hello@hearthtable.com</p>
+          </div>
+        </div>
+        <div class="reservation-box" id="reservation-box">
+          <div class="res-inner">
+            <p class="section-label" style="color: rgba(255,255,255,0.3);">Reservations</p>
+            <h3>Make a<br><em>reservation.</em></h3>
+            <p>We recommend reserving in advance, especially on weekends. Walk-ins are always welcome based on availability.</p>
+            <a href="https://calendly.com/carsonweed001/made-visible-discovery-call" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Reserve Online →</a>
+            <p class="res-note">Prefer to call? We're available during business hours at [Phone Number].</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">The Hearth <em>Table</em></span>
+      <span class="footer-copy">© 2026 The Hearth Table · Detroit, MI · hello@hearthtable.com</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      revealEls.forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>

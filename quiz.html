@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find your perfect Made Visible package — answer a few questions and get a personalized recommendation.">
+  <title>Find Your Package — Made Visible</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #F5F0E8;
+      --surface: #FDFAF5;
+      --ink: #1A1612;
+      --accent: #C8440A;
+      --accent-light: #F0C4A8;
+      --text-muted: #8C8278;
+      --text-soft: #4A443C;
+      --border: #D8D0C4;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --container: 1120px;
+      --radius-pill: 100px;
+      --radius-card: 20px;
+      --radius-sm: 16px;
+      --radius-btn: 12px;
+      --transition: 0.3s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-cream);
+      color: var(--text-soft);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100svh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    .quiz-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px 0;
+      background: var(--bg-cream);
+    }
+
+    .quiz-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 620px;
+      margin: 0 auto 16px;
+    }
+
+    .back-link {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+    }
+
+    .step-count {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .progress-track {
+      height: 3px;
+      background: var(--border);
+      width: 100%;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .quiz-header.is-result .step-count,
+    .quiz-header.is-result .progress-track {
+      visibility: hidden;
+    }
+
+    .quiz-main {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px 48px;
+    }
+
+    .step-viewport {
+      width: 100%;
+      max-width: 620px;
+      position: relative;
+    }
+
+    .step-content {
+      width: 100%;
+    }
+
+    .step-content.step-enter {
+      animation: stepIn 300ms ease forwards;
+    }
+
+    .step-content.step-exit {
+      animation: stepOut 300ms ease forwards;
+    }
+
+    @keyframes stepIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes stepOut {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+    }
+
+    .category-label {
+      display: block;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .options-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 18px 24px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--ink);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .option-btn:hover {
+      border-color: var(--text-soft);
+      background: rgba(26, 22, 18, 0.02);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      background: rgba(200, 68, 10, 0.04);
+    }
+
+    .contact-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .field-input,
+    .field-textarea {
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--ink);
+      transition: border-color 0.15s ease;
+    }
+
+    .field-textarea {
+      resize: vertical;
+      min-height: 96px;
+    }
+
+    .field-input::placeholder,
+    .field-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field-input:focus,
+    .field-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+
+    .nav-back {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      visibility: hidden;
+      transition: color 0.15s ease;
+    }
+
+    .nav-back.visible {
+      visibility: visible;
+    }
+
+    .nav-back:hover {
+      color: var(--ink);
+    }
+
+    .btn-continue {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 20px rgba(200, 68, 10, 0.25);
+      transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-continue:hover:not(:disabled) {
+      background: #a83808;
+      transform: translateY(-2px);
+    }
+
+    .btn-continue:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Result */
+    .result-wrap {
+      text-align: center;
+    }
+
+    .result-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .result-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .result-heading em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .result-message {
+      font-size: 1rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .tier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 32px;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .tier-card-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .tier-card-price {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .tier-card-price span {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      line-height: 1.45;
+      color: var(--text-soft);
+    }
+
+    .tier-features li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 20px rgba(200, 68, 10, 0.25);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: #a83808;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border: 1.5px solid var(--ink);
+      border-radius: var(--radius-pill);
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .result-footnote {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .result-footnote a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .result-footnote a:hover {
+      color: var(--ink);
+    }
+
+    /* Result — three-card stack */
+    .result-subtext {
+      font-size: 1rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 36px;
+      text-align: center;
+    }
+
+    .result-tier-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 0;
+    }
+
+    .result-tier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: left;
+      position: relative;
+      opacity: 0;
+    }
+
+    .result-tier-card.recommended {
+      border: 1.5px solid var(--accent);
+      box-shadow: 0 4px 24px rgba(200, 68, 10, 0.12);
+    }
+
+    .rec-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .result-card-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .result-card-price {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .result-card-price .per-mo {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .result-card-tagline {
+      font-style: italic;
+      font-size: 0.875rem;
+      color: var(--text-soft);
+      margin-bottom: 20px;
+    }
+
+    .result-card-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 20px;
+    }
+
+    .result-card-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .result-card-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-soft);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+
+    .result-card-features li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .result-card-cta {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 12px;
+      text-align: center;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+      text-decoration: none;
+    }
+
+    .result-card-cta.rec-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+
+    .result-card-cta.rec-btn:hover {
+      background: #a83808;
+      transform: translateY(-1px);
+    }
+
+    .result-card-cta.alt-btn {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--border);
+    }
+
+    .result-card-cta.alt-btn:hover {
+      background: rgba(26, 22, 18, 0.04);
+    }
+
+    @keyframes cardFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-tier-card.card-anim-0 { animation: cardFadeUp 0.5s ease 0s forwards; }
+    .result-tier-card.card-anim-1 { animation: cardFadeUp 0.5s ease 0.12s forwards; }
+    .result-tier-card.card-anim-2 { animation: cardFadeUp 0.5s ease 0.24s forwards; }
+
+    .result-bottom-note {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 32px;
+      line-height: 1.5;
+    }
+
+    .result-bottom-note a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .result-bottom-note a:hover {
+      color: var(--ink);
+    }
+
+    @media (max-width: 600px) {
+      .quiz-header {
+        padding: 16px 24px 0;
+      }
+
+      .quiz-main {
+        padding: 92px 24px 48px;
+      }
+
+      .result-tier-card {
+        padding: 24px;
+      }
+
+      .result-card-price {
+        font-size: 1.875rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="quiz-header" id="quiz-header">
+    <div class="quiz-header-row">
+      <a href="index.html" class="back-link">← Made Visible</a>
+      <span class="step-count" id="step-count">Step 1 of 7</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </header>
+
+  <main class="quiz-main">
+    <div class="step-viewport">
+      <div class="step-content" id="step-content"></div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const FORMSPREE_URL = 'https://formspree.io/f/xeedqbee';
+
+      /* Replace with your Notion integration credentials */
+      const NOTION_API_KEY = 'YOUR_NOTION_API_KEY';
+      const NOTION_DATABASE_ID = 'YOUR_DATABASE_ID';
+
+      const answers = {
+        step1: null,
+        step2: null,
+        step3: null,
+        step4: null,
+        step5: null,
+        step6: null,
+        name: '',
+        businessName: '',
+        email: '',
+        notes: '',
+        recommendedTier: '',
+        submittedAt: ''
+      };
+
+      let currentStep = 1;
+      let isTransitioning = false;
+      let hasSubmitted = false;
+
+      const stepContent = document.getElementById('step-content');
+      const stepCount = document.getElementById('step-count');
+      const progressFill = document.getElementById('progress-fill');
+      const quizHeader = document.getElementById('quiz-header');
+
+      const steps = [
+        {
+          category: 'Your Business',
+          question: 'What kind of business are you building?',
+          key: 'step1',
+          options: [
+            'Life or Business Coaching',
+            'Salon, Spa, or Beauty',
+            'Restaurant or Food & Beverage',
+            'Contractor or Home Services',
+            'Fitness or Wellness',
+            'Retail or E-commerce',
+            'Something else'
+          ]
+        },
+        {
+          category: 'Your Stage',
+          question: 'Where are you in your business journey?',
+          key: 'step2',
+          options: [
+            'Just getting started — haven\'t launched yet',
+            'Recently launched, still building momentum',
+            'Been in business 1–3 years, ready to grow',
+            'Established business, need to modernize my presence'
+          ]
+        },
+        {
+          category: 'Your Presence',
+          question: 'What does your online presence look like right now?',
+          key: 'step3',
+          options: [
+            'Nothing yet — starting from scratch',
+            'I have a website but it\'s outdated or not working',
+            'I have social media but it\'s inconsistent',
+            'I have both, but neither is working for me'
+          ]
+        },
+        {
+          category: 'Your Challenge',
+          question: 'What\'s your biggest challenge right now?',
+          key: 'step4',
+          options: [
+            'People can\'t find me online',
+            'My online presence doesn\'t look professional',
+            'I don\'t have time to manage social media',
+            'I\'m not getting enough new clients',
+            'I\'m not sure where to start'
+          ]
+        },
+        {
+          category: 'Your Goals',
+          question: 'What are you most interested in getting help with?',
+          key: 'step5',
+          options: [
+            'A website to establish my presence',
+            'Website plus consistent social media management',
+            'The full package — website, social, reviews, and search visibility',
+            'I\'m not sure yet — I need some guidance'
+          ]
+        },
+        {
+          category: 'Your Timeline',
+          question: 'How soon are you looking to get started?',
+          key: 'step6',
+          options: [
+            'As soon as possible',
+            'Within the next month or two',
+            'I have a specific launch date I\'m working toward',
+            'Just exploring for now'
+          ]
+        }
+      ];
+
+      const tierDetails = {
+        Essentials: {
+          price: 129,
+          tagline: 'Your foundation online — built, hosted, and working for you.',
+          features: [
+            'Custom website built and hosted',
+            'Monthly site maintenance and updates',
+            'Google Business Profile setup and optimization',
+            'Google review outreach system',
+            'Monthly traffic and review summary'
+          ]
+        },
+        Growth: {
+          price: 249,
+          tagline: 'Everything in Essentials, plus a consistent social media presence.',
+          features: [
+            'Everything in Essentials',
+            '8–12 social media posts per month',
+            '2 platforms managed',
+            'Custom graphics and captions in your brand voice',
+            'Content scheduled and posted for you'
+          ]
+        },
+        Authority: {
+          price: 499,
+          tagline: 'Full digital presence management — website, social, SEO, and video.',
+          features: [
+            'Everything in Growth',
+            '16–20 posts per month across up to 3 platforms',
+            'Short-form video content created monthly',
+            'Monthly on-page SEO updates',
+            'Monthly performance report',
+            'Open line of communication — same-day responses'
+          ]
+        }
+      };
+
+      const personalizedMessages = {
+        'People can\'t find me online': {
+          Essentials: '[Name], getting found starts with a solid foundation — a professional website and an optimized Google profile is exactly where we begin.',
+          Growth: '[Name], visibility comes from showing up consistently — your website gets you found, and regular social content keeps you there.',
+          Authority: '[Name], we\'ll build your presence across every channel people use to find a business like yours — website, search, and social all working together.'
+        },
+        'My online presence doesn\'t look professional': {
+          Essentials: '[Name], a custom website built around your brand is the fastest way to change how people perceive your business online.',
+          Growth: '[Name], a polished website and consistent social content will make your business look established and intentional from day one.',
+          Authority: '[Name], we\'ll make sure every touchpoint — your website, your social, your search presence — reflects the business you\'re building.'
+        },
+        'I don\'t have time to manage social media': {
+          Essentials: '[Name], we handle your website so you never have to think about it — and when you\'re ready to add social, we\'re already set up to take that on.',
+          Growth: '[Name], we take social media completely off your plate — content created, scheduled, and posted without you lifting a finger.',
+          Authority: '[Name], from social to SEO to your website, we manage everything — your only job is showing up for your clients.'
+        },
+        'I\'m not getting enough new clients': {
+          Essentials: '[Name], a professional website with a clear call to action is often the single biggest driver of new inbound inquiries.',
+          Growth: '[Name], consistent social content paired with a strong website is the combination that turns online presence into actual client inquiries.',
+          Authority: '[Name], more clients comes from being visible everywhere they\'re looking — that\'s exactly what this package is designed to do.'
+        },
+        'I\'m not sure where to start': {
+          Essentials: '[Name], starting with a solid website and Google presence gives you a foundation that everything else builds on.',
+          Growth: '[Name], this is the most common starting point for businesses in your position — website, social, and reviews all handled from day one.',
+          Authority: '[Name], when you\'re not sure where to start, having everything covered means you won\'t have to figure it out as you go.'
+        }
+      };
+
+      function calculateTier() {
+        const stage = answers.step2;
+        const challenge = answers.step4;
+        const goal = answers.step5;
+
+        const isNewBusiness = stage === "Just getting started — haven't launched yet";
+        const isEstablished = stage === "Been in business 1–3 years, ready to grow" || stage === "Established business, need to modernize my presence";
+
+        const wantsWebsiteOnly = goal === "A website to establish my presence";
+        const wantsFullPackage = goal === "The full package — website, social, reviews, and search visibility";
+
+        const basicChallenge = challenge === "People can't find me online" || challenge === "I'm not sure where to start";
+        const performanceChallenge = challenge === "I'm not getting enough new clients" || challenge === "My online presence doesn't look professional" || challenge === "I don't have time to manage social media";
+
+        // Essentials: pre-launch + website only + basic challenge
+        if (isNewBusiness && wantsWebsiteOnly && basicChallenge) {
+          return 'Essentials';
+        }
+
+        // Authority: established + full package + performance challenge
+        if (isEstablished && wantsFullPackage && performanceChallenge) {
+          return 'Authority';
+        }
+
+        // Growth: everything else
+        return 'Growth';
+      }
+
+      function hasAnswersThrough(step) {
+        if (step <= 1) return true;
+        if (step > 1 && !answers.step1) return false;
+        if (step > 2 && !answers.step2) return false;
+        if (step > 3 && !answers.step3) return false;
+        if (step > 4 && !answers.step4) return false;
+        if (step > 5 && !answers.step5) return false;
+        if (step > 6 && !answers.step6) return false;
+        if (step > 7) {
+          return answers.name.trim().length > 0 && answers.email.indexOf('@') !== -1;
+        }
+        return true;
+      }
+
+      function updateChrome() {
+        quizHeader.classList.remove('is-result');
+        if (currentStep === 8) {
+          stepCount.textContent = 'Step 7 of 7';
+          progressFill.style.width = '100%';
+          return;
+        }
+        stepCount.textContent = 'Step ' + currentStep + ' of 7';
+        progressFill.style.width = ((currentStep / 7) * 100) + '%';
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function renderOptions(stepDef) {
+        const key = stepDef.key;
+        const selected = answers[key];
+        let html = '<div class="options-stack">';
+        stepDef.options.forEach(function (opt) {
+          const isSelected = selected === opt ? ' selected' : '';
+          html += '<button type="button" class="option-btn' + isSelected + '" data-value="' + escapeHtml(opt) + '">' + escapeHtml(opt) + '</button>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      function renderContact() {
+        return (
+          '<div class="contact-fields">' +
+            '<input type="text" class="field-input" id="field-name" placeholder="First Name" value="' + escapeHtml(answers.name) + '">' +
+            '<input type="text" class="field-input" id="field-business" placeholder="Business name (optional)" value="' + escapeHtml(answers.businessName) + '">' +
+            '<input type="email" class="field-input" id="field-email" placeholder="Email Address" value="' + escapeHtml(answers.email) + '">' +
+            '<textarea class="field-textarea" id="field-notes" rows="3" placeholder="Anything else you\'d like us to know?">' + escapeHtml(answers.notes) + '</textarea>' +
+          '</div>'
+        );
+      }
+
+      function renderResult() {
+        const tier = answers.recommendedTier;
+        const challenge = answers.step4 || "I'm not sure where to start";
+        const firstName = escapeHtml(answers.name ? answers.name.trim().split(/\s+/)[0] : 'there');
+        const msgTemplate = (personalizedMessages[challenge] && personalizedMessages[challenge][tier]) ||
+          '[Name], based on your answers, ' + tier + ' is the right fit for where your business is headed.';
+        const message = msgTemplate.replace('[Name]', firstName);
+
+        const tierOrder = ['Essentials', 'Growth', 'Authority'];
+        let cardsHtml = '';
+        tierOrder.forEach(function (t, idx) {
+          const d = tierDetails[t];
+          const isRec = t === tier;
+          const cardClass = 'result-tier-card card-anim-' + idx + (isRec ? ' recommended' : '');
+          const badge = isRec ? '<span class="rec-badge">Recommended for you</span>' : '';
+
+          let featureHtml = '';
+          d.features.forEach(function (f) {
+            featureHtml += '<li>' + escapeHtml(f) + '</li>';
+          });
+
+          const ctaClass = isRec ? 'result-card-cta rec-btn' : 'result-card-cta alt-btn';
+          const ctaLabel = 'Book My Free Call \u2192';
+
+          cardsHtml += (
+            '<div class="' + cardClass + '">' +
+              badge +
+              '<span class="result-card-label">' + escapeHtml(t) + '</span>' +
+              '<div class="result-card-price">$' + d.price + ' <span class="per-mo">/mo</span></div>' +
+              '<p class="result-card-tagline">' + escapeHtml(d.tagline) + '</p>' +
+              '<div class="result-card-divider"></div>' +
+              '<ul class="result-card-features">' + featureHtml + '</ul>' +
+              '<a href="https://calendly.com/carsonweed001/made-visible-discovery-call" target="_blank" rel="noopener noreferrer" class="' + ctaClass + '">' + ctaLabel + '</a>' +
+            '</div>'
+          );
+        });
+
+        return (
+          '<div class="result-wrap">' +
+            '<span class="result-label">Your Recommendation</span>' +
+            '<h2 class="result-heading">Here\'s what we\'d <em>suggest for you.</em></h2>' +
+            '<p class="result-subtext">' + message + '</p>' +
+            '<div class="result-tier-stack">' + cardsHtml + '</div>' +
+            '<p class="result-bottom-note">Questions before booking? Reach us at <a href="mailto:hello@madevisible.com">hello@madevisible.com</a></p>' +
+          '</div>'
+        );
+      }
+
+      function bindStepEvents() {
+        if (currentStep === 8) return;
+
+        const continueBtn = document.getElementById('btn-continue');
+        const backBtn = document.getElementById('btn-back');
+
+        if (backBtn) {
+          backBtn.addEventListener('click', function () {
+            if (currentStep > 1) goToStep(currentStep - 1);
+          });
+        }
+
+        if (currentStep <= 6) {
+          stepContent.querySelectorAll('.option-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              selectOption(btn, btn.getAttribute('data-value'));
+            });
+          });
+        }
+
+        if (currentStep === 7) {
+          const nameEl = document.getElementById('field-name');
+          const businessEl = document.getElementById('field-business');
+          const emailEl = document.getElementById('field-email');
+          const notesEl = document.getElementById('field-notes');
+
+          function syncFields() {
+            answers.name = nameEl.value;
+            answers.businessName = businessEl.value;
+            answers.email = emailEl.value;
+            answers.notes = notesEl.value;
+            validateStep();
+          }
+
+          nameEl.addEventListener('input', syncFields);
+          businessEl.addEventListener('input', syncFields);
+          emailEl.addEventListener('input', syncFields);
+          notesEl.addEventListener('input', syncFields);
+        }
+
+        if (continueBtn) {
+          continueBtn.addEventListener('click', function () {
+            if (continueBtn.disabled || isTransitioning) return;
+            if (currentStep === 7) {
+              showResult();
+            } else {
+              goToStep(currentStep + 1);
+            }
+          });
+        }
+
+        validateStep();
+      }
+
+      function selectOption(el, value) {
+        const stepDef = steps[currentStep - 1];
+        if (!stepDef) return;
+        answers[stepDef.key] = value;
+        stepContent.querySelectorAll('.option-btn').forEach(function (btn) {
+          btn.classList.toggle('selected', btn === el);
+        });
+        validateStep();
+      }
+
+      function validateStep() {
+        const continueBtn = document.getElementById('btn-continue');
+        if (!continueBtn) return;
+
+        if (currentStep === 7) {
+          continueBtn.disabled = !(answers.name.trim().length > 0 && answers.email.indexOf('@') !== -1);
+          return;
+        }
+
+        if (currentStep <= 6) {
+          const key = steps[currentStep - 1].key;
+          continueBtn.disabled = !answers[key];
+        }
+      }
+
+      function buildStepHtml() {
+        if (currentStep === 8) {
+          return renderResult();
+        }
+
+        if (currentStep === 7) {
+          return (
+            '<span class="category-label">Your Info</span>' +
+            '<h2 class="question-text">Last step — tell us about yourself.</h2>' +
+            renderContact() +
+            '<div class="step-nav">' +
+              '<button type="button" class="nav-back visible" id="btn-back">Back</button>' +
+              '<button type="button" class="btn-continue" id="btn-continue" disabled>See My Recommendation →</button>' +
+            '</div>'
+          );
+        }
+
+        const stepDef = steps[currentStep - 1];
+        const backClass = currentStep > 1 ? ' visible' : '';
+
+        return (
+          '<span class="category-label">' + escapeHtml(stepDef.category) + '</span>' +
+          '<h2 class="question-text">' + escapeHtml(stepDef.question) + '</h2>' +
+          renderOptions(stepDef) +
+          '<div class="step-nav">' +
+            '<button type="button" class="nav-back' + backClass + '" id="btn-back">Back</button>' +
+            '<button type="button" class="btn-continue" id="btn-continue" disabled>Continue</button>' +
+          '</div>'
+        );
+      }
+
+      function renderStep(pushHistory) {
+        updateChrome();
+        stepContent.innerHTML = buildStepHtml();
+        bindStepEvents();
+
+        if (pushHistory !== false) {
+          history.pushState({ step: currentStep }, '', '?step=' + currentStep);
+        }
+      }
+
+      function goToStep(n, pushHistory) {
+        if (isTransitioning) return;
+        if (n < 1 || n > 8) return;
+        if (n > 1 && !hasAnswersThrough(n - 1)) {
+          n = 1;
+        }
+
+        const prev = currentStep;
+        if (prev === n) {
+          renderStep(pushHistory);
+          return;
+        }
+
+        isTransitioning = true;
+        stepContent.classList.add('step-exit');
+
+        setTimeout(function () {
+          currentStep = n;
+          stepContent.classList.remove('step-exit');
+          stepContent.classList.add('step-enter');
+          renderStep(pushHistory);
+
+          setTimeout(function () {
+            stepContent.classList.remove('step-enter');
+            isTransitioning = false;
+          }, 300);
+        }, 300);
+      }
+
+      /*
+       * Formspree autoresponse (confirmation email to the user):
+       * 1. Log into formspree.io and open your form settings
+       * 2. Enable "Auto-response" and set the reply-to field to the email field name
+       * 3. Suggested subject: "Your Made Visible recommendation is ready"
+       * 4. Suggested body: "Hi [name], thanks for taking the time to share about your business.
+       *    Based on your answers, we think [tier] is the right fit for you. We'll be in touch
+       *    within 24 hours to confirm your free call. — Made Visible"
+       */
+      function submitToFormspree() {
+        return fetch(FORMSPREE_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _replyto: answers.email,
+            _subject: 'New Made Visible Lead',
+            name: answers.name,
+            businessName: answers.businessName,
+            email: answers.email,
+            businessType: answers.step1,
+            businessStage: answers.step2,
+            currentPresence: answers.step3,
+            biggestChallenge: answers.step4,
+            interestedIn: answers.step5,
+            timeline: answers.step6,
+            additionalNotes: answers.notes,
+            recommendedTier: answers.recommendedTier,
+            submittedAt: answers.submittedAt
+          })
+        }).then(function (response) {
+          if (!response.ok) {
+            return Promise.reject(new Error('Server error ' + response.status));
+          }
+          return response.json();
+        });
+      }
+
+      /*
+       * NOTION SETUP:
+       * 1. Go to notion.so/my-integrations and create a new integration
+       * 2. Copy the Internal Integration Token — this is your NOTION_API_KEY
+       * 3. Create a new database in Notion with the exact column names listed below and their property types
+       * 4. Open the database, click Share, and invite your integration by name
+       * 5. Copy the database ID from the URL (the 32-character string between the last slash and the question mark)
+       * 6. Replace NOTION_API_KEY and NOTION_DATABASE_ID above
+       */
+      function submitToNotion() {
+        if (NOTION_API_KEY === 'YOUR_NOTION_API_KEY' || NOTION_DATABASE_ID === 'YOUR_DATABASE_ID') {
+          return Promise.resolve();
+        }
+
+        return fetch('https://api.notion.com/v1/pages', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + NOTION_API_KEY,
+            'Content-Type': 'application/json',
+            'Notion-Version': '2022-06-28'
+          },
+          body: JSON.stringify({
+            parent: { database_id: NOTION_DATABASE_ID },
+            properties: {
+              'Name': {
+                title: [{ text: { content: answers.name || 'Unknown' } }]
+              },
+              'Email': {
+                email: answers.email || null
+              },
+              'Business Name': {
+                rich_text: [{ text: { content: answers.businessName || '' } }]
+              },
+              'Business Type': {
+                select: answers.step1 ? { name: answers.step1 } : null
+              },
+              'Business Stage': {
+                select: answers.step2 ? { name: answers.step2 } : null
+              },
+              'Current Presence': {
+                select: answers.step3 ? { name: answers.step3 } : null
+              },
+              'Biggest Challenge': {
+                select: answers.step4 ? { name: answers.step4 } : null
+              },
+              'Interested In': {
+                select: answers.step5 ? { name: answers.step5 } : null
+              },
+              'Timeline': {
+                select: answers.step6 ? { name: answers.step6 } : null
+              },
+              'Notes': {
+                rich_text: [{ text: { content: answers.notes || '' } }]
+              },
+              'Recommended Tier': {
+                select: { name: answers.recommendedTier }
+              },
+              'Submitted At': {
+                date: { start: answers.submittedAt }
+              },
+              'Status': {
+                select: { name: 'New Lead' }
+              }
+            }
+          })
+        }).catch(function (err) {
+          console.error('Notion submission failed:', err);
+        });
+      }
+
+      function showSubmitError() {
+        if (document.getElementById('submit-error')) return;
+        var errorEl = document.createElement('p');
+        errorEl.id = 'submit-error';
+        errorEl.style.cssText = 'color:var(--accent);font-size:0.875rem;text-align:center;margin-top:12px;line-height:1.5;';
+        errorEl.textContent = 'Something went wrong — please check your connection and try again.';
+        var navEl = stepContent.querySelector('.step-nav');
+        if (navEl) navEl.insertAdjacentElement('afterend', errorEl);
+      }
+
+      function transitionToResult() {
+        isTransitioning = true;
+        stepContent.classList.add('step-exit');
+        setTimeout(function () {
+          currentStep = 8;
+          stepContent.classList.remove('step-exit');
+          stepContent.classList.add('step-enter');
+          window.scrollTo(0, 0);
+          renderStep(true);
+          setTimeout(function () {
+            stepContent.classList.remove('step-enter');
+            isTransitioning = false;
+          }, 300);
+        }, 300);
+      }
+
+      function showResult() {
+        if (hasSubmitted) return;
+        hasSubmitted = true;
+
+        answers.recommendedTier = calculateTier();
+        answers.submittedAt = new Date().toISOString();
+
+        var continueBtn = document.getElementById('btn-continue');
+        if (continueBtn) {
+          continueBtn.disabled = true;
+          continueBtn.textContent = 'Sending\u2026';
+        }
+
+        submitToFormspree()
+          .then(function () {
+            submitToNotion();
+            transitionToResult();
+          })
+          .catch(function () {
+            hasSubmitted = false;
+            if (continueBtn) {
+              continueBtn.disabled = false;
+              continueBtn.textContent = 'See My Recommendation \u2192';
+            }
+            showSubmitError();
+          });
+      }
+
+      window.addEventListener('popstate', function (e) {
+        const step = (e.state && e.state.step) ? e.state.step : 1;
+        if (step === 8 && !answers.recommendedTier) {
+          goToStep(7, false);
+          return;
+        }
+        if (!hasAnswersThrough(step === 8 ? 7 : step)) {
+          history.replaceState({ step: 1 }, '', '?step=1');
+          currentStep = 1;
+          renderStep(false);
+          return;
+        }
+        currentStep = step;
+        renderStep(false);
+      });
+
+      function init() {
+        const params = new URLSearchParams(window.location.search);
+        let step = parseInt(params.get('step'), 10) || 1;
+
+        if (step < 1 || step > 8) step = 1;
+        if (step > 1 && !hasAnswersThrough(step === 8 ? 7 : step)) {
+          step = 1;
+          history.replaceState({ step: 1 }, '', '?step=1');
+        } else if (!history.state) {
+          history.replaceState({ step: step }, '', '?step=' + step);
+        }
+
+        currentStep = step;
+        renderStep(false);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
